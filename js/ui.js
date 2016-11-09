@@ -5,6 +5,17 @@ $(function () {
 		},
 		create: function (event, ui) {
 			renderBlank(this.value)
-		}
+		},
+		min: 2,
+		max: 20
 	})
+	
+	$("#difficulty").spinner({
+		min: 1,
+		max: 5
+	})
+	
+	$("#addition").attr("checked", true)
+	$("#multiplication").attr("checked", true)
+	$("[type=checkbox]").button()
 })

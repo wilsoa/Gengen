@@ -3,14 +3,30 @@
 		<title>Gengen&ndash;a Kenken generator</title>
 		<script src="js/jquery-3.1.1.min.js"></script>
 		<script src="js/jquery-ui.min.js"></script>
+		<script src="js/kenken.js"></script>
 		<script src="js/render.js"></script>
-		<script src="js/generate.js"></script>
 		<link rel="stylesheet" href="css/jquery-ui.min.css" />
 		<link rel="stylesheet" href="css/style.css" />
 		<script src="js/ui.js"></script>
 	</head>
 	<body>
-		Size: <input id="size" value="5">
+		<div id="controls">
+			Size: <input id="size" value="5"><br />
+			Difficulty: <input id="difficulty" value="2">
+			<fieldset>
+			  <legend>Allowed operations</legend>
+			  <div id="operations">
+				  <input type="checkbox" name="addition" id="addition">
+				  <label for="addition" checked="checked">+</label>
+				  <input type="checkbox" name="subtraction" id="subtraction">
+				  <label for="subtraction">-</label>
+				  <input type="checkbox" name="multiplication" id="multiplication">
+				  <label for="multiplication">&times;</label>
+				  <input type="checkbox" name="division" id="division">
+				  <label for="division">&divide;</label>
+			  </div>
+			</fieldset>
+		</div>
 
 		<table id="kenken"></table>
 	</body>

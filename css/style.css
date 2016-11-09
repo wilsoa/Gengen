@@ -1,7 +1,13 @@
 #kenken {
 	float: right;
+	border-collapse: collapse;
+    border-spacing: 0;
 }
 
 #kenken td {
 	border: 1px solid grey;
+}
+
+#controls {
+	float: left;
 }
