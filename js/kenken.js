@@ -98,8 +98,20 @@ Cell.prototype.setCellGroup = function(cellGroup) {
 	this.cellGroup = cellGroup
 }
 
-// Return an object with the cell's neighbors indexed by relative location
+// Return an array of the cells neighbors
 Cell.prototype.getNeighbors = function () {
+    var neighbors = []
+    
+    if (this.x > 0) neighbors.push(this.kenken.board[this.x-1][this.y])
+    if (this.y > 0) neighbors.push(this.kenken.board[this.x][this.y-1])
+    if (this.x < this.kenken.size - 1) neighbors.push(this.kenken.board[this.x+1][this.y])
+    if (this.y < this.kenken.size - 1) neighbors.push(this.kenken.board[this.x][this.y+1])
+    
+    return neighbors
+}
+
+// Return an object with the cell's neighbors indexed by relative location
+Cell.prototype.getNeighborsOriented = function () {
     var neighbors = {}
     
     if (this.x > 0) neighbors.left = this.kenken.board[this.x-1][this.y]
