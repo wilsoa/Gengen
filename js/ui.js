@@ -18,4 +18,8 @@ $(function () {
 	$("#addition").attr("checked", true)
 	$("#multiplication").attr("checked", true)
 	$("[type=checkbox]").button()
+	
+	$("#generate").button().on("click", function (){
+		generateKenken($("#size").spinner("value"))
+	})
 })
