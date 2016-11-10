@@ -12,8 +12,8 @@ function renderBlank (size) {
 }
 
 function renderCell (cell, dimension) {
-	var td = $("<td />").html(cell.value).width(dimension).height(dimension)
-	
+	var td = $("<td align='center' />").html(cell.value).width(dimension).height(dimension)
+	console.log(cell.value)
 	return td
 }
 
