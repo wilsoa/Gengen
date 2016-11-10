@@ -18,27 +18,14 @@ function Cell (kenken, x, y) {
     this.y = y
 }
 
-// Return an object with the cell's neighbors, returning false if there are no neighbors
+// Return an object with the cell's neighbors indexed by relative location
 Cell.prototype.getNeighbors = function () {
-    var neighbors = {}, empty = true
+    var neighbors = {}
     
-    if (this.x > 0) {
-        neighbors.left = this.kenken.board[this.x-1][this.y]
-        empty = false
-    }
-    if (this.y > 0){
-        neighbors.up = this.kenken.board[this.x][this.y-1]
-        empty = false
-    }
-    if (this.x < this.kenken.size - 1) {
-        neighbors.right = this.kenken.board[this.x+1][this.y]
-        empty = false
-    }
-    if (this.y < this.kenken.size - 1) {
-        neighbors.down = this.kenken.board[this.x][this.y+1]
-        empty = false
-    }
+    if (this.x > 0) neighbors.left = this.kenken.board[this.x-1][this.y]
+    if (this.y > 0) neighbors.up = this.kenken.board[this.x][this.y-1]
+    if (this.x < this.kenken.size - 1) neighbors.right = this.kenken.board[this.x+1][this.y]
+    if (this.y < this.kenken.size - 1) neighbors.down = this.kenken.board[this.x][this.y+1]
     
-    // If there are no neighbors, return false
-    return empty || neighbors
+    return neighbors
 }
