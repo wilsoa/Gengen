@@ -12,7 +12,7 @@ function renderBlank (size) {
 }
 
 function renderCell (cell, dimension) {
-	var td = $("<td />").width(dimension).height(dimension)
+	var td = $("<td />").html(cell.value).width(dimension).height(dimension)
 	
 	return td
 }
