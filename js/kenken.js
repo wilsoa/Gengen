@@ -1,3 +1,4 @@
+// A class for the ken ken board
 function Kenken (size) {
     this.size = size;
     this.board = [];
@@ -10,12 +11,13 @@ function Kenken (size) {
     }
 }
 
-
 // A class for a single cell in the Kenken which houses data on the cell and methods for finding adjacent cells
 function Cell (kenken, x, y) {
     this.kenken = kenken
     this.x = x
     this.y = y
+	this.groupID = 0
+	this.value = 0
 }
 
 // Return an object with the cell's neighbors, returning false if there are no neighbors
@@ -41,4 +43,34 @@ Cell.prototype.getNeighbors = function () {
     
     // If there are no neighbors, return false
     return empty || neighbors
+}
+
+// Function to generate an array with the numbers 1 through n in a random order
+function shuffledArray (n) {
+	numberArray=[]
+	// Fill the array with numbers 1 through n
+	for(var i = 0; i < n; i++) {
+		numberArray.push(i+1)
+	}
+	
+	// Randomly shuffle the array, doing the algorithm once forward and once
+	// backward, to help create more "randomness" and to attemp to resolve the 
+	// first element problem. (First element would never end up in first spot)
+	for (var i = 0; i < n-1; i++) {
+		// Generate a random integer in the range [i+1,n-1]
+		// Since Math.random() generates a number in the range [0,1)
+		 randomNum = Math.floor((n-(i+1))*Math.random()+(i+1))
+		
+		//swap the array at spots i and randomNum
+		numToSwap = numberArray[i]
+		numberArray[i] = numberArray[randomNum]
+		numberArray[randomNum] = numToSwap
+    }
+	
+	for(var i = 0; i < n-1; i) {
+		
+	}
+	
+	//return then shuffled array
+	return numberArray
 }
