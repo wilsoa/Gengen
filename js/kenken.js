@@ -64,32 +64,23 @@ function CellGroup (kenken, cell, id) {
 // Returns true if growing was successful, false if it was unsuccessful
 CellGroup.prototype.grow = function() {
 	// Generate a random integer in range [0,cells.size()-1] for which cell we should attempt to grow at first
-	var startingCellNumber = Math.Floor(cells.size()*Math.random())
+	var startingCellNumber = Math.floor(this.cells.length*Math.random())
 	var cellNum = startingCellNumber
 	while(true) {
 		var validCellFound = false
-		var cellToGrowFrom = cells[cellNum]
+		var cellToGrowFrom = this.cells[cellNum]
 		var cellNeighbors = cellToGrowFrom.getNeighbors()
-		if(neighbors == false) {
-			// Cell has no neighbors, should never happen
-			// Try the next cell in the list
-			cellNum = (cellNum + 1) % this.cells.size()
+		// TO DO: Figure out how to randomize picking which neighbor to choose from!
+		
+		// If all the neighbors were invalid, try the next cell in the list
+		if(validCellFound == false) {
+			cellNum = (cellNum + 1) % this.cells.size() 
 			if(cellNum == startingCellNumber) {
-				// we have gone through the whole list with no valid neighbors
-				return false
-			}
-		} else { // neighbors is not empty, try to find a valid neighbor
-			// TO DO: Figure out how to randomize picking which neighbor to choose from!
-			
-			// If all the neighbors were invalid, try the next cell in the list
-			if(validCellFound == false) {
-				cellNum = (cellNum + 1) % this.cells.size() 
-				if(cellNum == startingCellNumber) {
-				// we have gone through the whole list with no valid neighbors
-				return false
-				}
+			// we have gone through the whole list with no valid neighbors
+			return false
 			}
 		}
+		
 	}
 }
 
