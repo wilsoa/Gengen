@@ -28,7 +28,8 @@ function Kenken (size) {
 	var groupID = 1
 	for(var x = 0; x < size; x++) {
 		for(var y = 0; y < size; y++) {
-			console.log('Checking cell- X: '+x+', Y: '+y)
+			console.log('Checking cell with board loction- X: '+x+', Y: '+y)
+			console.log('Actual cell location- X: '+this.board[x][y].x+', Y: '+this.board[x][y].y)
 			if(this.board[x][y].cellGroup == undefined) {
 				console.log('Cell was undefined!')
 				// Generate a random integer in the range [minGroupSize,maxGroupSize] for the size of the group
@@ -62,20 +63,32 @@ function shuffleBoard (size,board) {
 		// Generate two random integers in the range [0,size)
 		var column1 = Math.floor(size*Math.random())
 		var column2 = Math.floor(size*Math.random())
+		console.log('swapping columns: '+column1+' and '+column2)
 		// Swap the two columns
+		// This means we also need to switch the y values of the cells!
 		for(var j = 0; j < size; j++) {
-			var tempValue = board[j][column1]
+			var tempCell = board[j][column1]
+			var tempCellY = tempCell.y
 			board[j][column1] = board[j][column2]
-			board[j][column2] = tempValue
+			board[j][column1].y = board[j][column2].y
+			board[j][column2] = tempCell
+			board[j][column2].y = tempCellY
 		}
 		
 		// Generate two random integers in the range [0,size)
 		var row1 = Math.floor(size*Math.random())
 		var row2 = Math.floor(size*Math.random())
-		// Swap the two rows, a lot easier than swapping two columns
-		var tempRow = board[row1]
-		board[row1] = board[row2]
-		board[row2] = tempRow
+		console.log('swapping rows: '+row1+' and '+row2)
+		// Swap the two rows
+		// This means we also need to switch the x values of the cells!
+		for(var j = 0; j < size; j++) {
+			var tempCell = board[row1][j]
+			var tempCellX = tempCell.x
+			board[row1][j] = board[row2][j]
+			board[row1][j].x = board[row2][j].x
+			board[row2][j] = tempCell
+			board[row2][j].x = tempCellX
+		}
 	}
 }
 
