@@ -6,10 +6,13 @@ function generateKenken (size) {
 
 // A class for the ken ken board
 function Kenken (size) {
-    this.size = size;
-    this.board = [];
+    this.size = size
+    this.board = []
 	this.minGroupSize = 1
 	this.maxGroupSize = 5 //TO DO: This should be determined from web page
+	this.cellGroups = []
+	
+	
 	var builderArray = shuffledArray(size)
     
     for (var x = 0; x < size; x++) {
@@ -21,6 +24,36 @@ function Kenken (size) {
         }
     }
 	shuffleBoard(size,this.board)
+	
+	var groupID = 1
+	for(var x = 0; x < size; x++) {
+		for(var y = 0; y < size; y++) {
+			console.log('Checking cell- X: '+x+', Y: '+y)
+			if(this.board[x][y].cellGroup == undefined) {
+				console.log('Cell was undefined!')
+				// Generate a random integer in the range [minGroupSize,maxGroupSize] for the size of the group
+				var groupSize = Math.floor((this.maxGroupSize-this.minGroupSize+1)*Math.random()+(this.minGroupSize))
+				// Create the new CellGroup object
+				var newCellGroup = new CellGroup(this, this.board[x][y], groupID)
+				// Grow the new cell group groupSize-1 times, only if the groupSize is not one (since it already has size one)
+				if(groupSize != 1) {
+					for(var m = 0; m < groupSize-1; m++) {
+						newCellGroup.grow()
+					}
+				}
+				this.cellGroups.push(newCellGroup)
+				
+				// The code in the following block is purely to make sure cells are working right
+				console.log('Created group of cells with ID: '+groupID+' of wanted size '+groupSize+' but was actually of size '+newCellGroup.cells.length)
+				console.log('Group locations:')
+				for(var k = 0; k < newCellGroup.cells.length; k++) {
+					console.log('Cell with location- X: '+newCellGroup.cells[k].x+', Y: '+newCellGroup.cells[k].y)
+				}
+				
+				groupID = groupID + 1
+			}
+		}
+	}
 }
 
 function shuffleBoard (size,board) {
@@ -83,7 +116,7 @@ CellGroup.prototype.grow = function() {
 		}
 		
 		// If all the neighbors were invalid, try the next cell in the list
-		cellNum = (cellNum + 1) % this.cells.size() 
+		cellNum = (cellNum + 1) % this.cells.length
 		if(cellNum == startingCellNumber) {
 			// we have gone through the whole list with no valid neighbors
 			return false
