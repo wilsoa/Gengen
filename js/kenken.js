@@ -30,10 +30,10 @@ function shuffleBoard (size,board) {
 		var column1 = Math.floor(size*Math.random())
 		var column2 = Math.floor(size*Math.random())
 		// Swap the two columns
-		for(var i = 0; i < size; i++) {
-			var tempValue = board[i][column1]
-			board[i][column1] = board[i][column2]
-			board[i][column2] = tempValue
+		for(var j = 0; j < size; j++) {
+			var tempValue = board[j][column1]
+			board[j][column1] = board[j][column2]
+			board[j][column2] = tempValue
 		}
 		
 		// Generate two random integers in the range [0,size)
