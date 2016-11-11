@@ -63,22 +63,30 @@ function CellGroup (kenken, cell, id) {
 // Grow the cell group up to maximum size, or smaller if board is not big enough
 // Returns true if growing was successful, false if it was unsuccessful
 CellGroup.prototype.grow = function() {
-	// Generate a random integer in range [0,cells.size()-1] for which cell we should attempt to grow at first
+	// Generate a random integer in range [0,cells.length-1] for which cell we should attempt to grow at first
 	var startingCellNumber = Math.floor(this.cells.length*Math.random())
 	var cellNum = startingCellNumber
 	while(true) {
-		var validCellFound = false
 		var cellToGrowFrom = this.cells[cellNum]
+		// Get the array of neighbors of this cell
 		var cellNeighbors = cellToGrowFrom.getNeighbors()
-		// TO DO: Figure out how to randomize picking which neighbor to choose from!
+		//Generate a random integer in range [0,cellNeighbors.length-1]
+		var neighborCellNum = Math.floor(cellNeighbors.length*Math.random())
+		// Go through each neighbor. If one is valid, make it the next cell in this group.
+		for(var i = 0; i < cellNeighbors.length; i++) {
+			var neighborCell = cellNeighbors[((i+neighborCellNum)%cellNeighbors.length)]
+			if(neighborCell.cellGroup == undefined) {
+				this.cells.push(neighborCell)
+				neighborCell.setCellGroup(this)
+				return true
+			}
+		}
 		
 		// If all the neighbors were invalid, try the next cell in the list
-		if(validCellFound == false) {
-			cellNum = (cellNum + 1) % this.cells.size() 
-			if(cellNum == startingCellNumber) {
+		cellNum = (cellNum + 1) % this.cells.size() 
+		if(cellNum == startingCellNumber) {
 			// we have gone through the whole list with no valid neighbors
 			return false
-			}
 		}
 		
 	}
