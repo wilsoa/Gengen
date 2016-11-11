@@ -1,7 +1,7 @@
 function renderBlank (size) {
 	$("#kenken").empty()
 	var dimension = $(window).height() / size * .9;
-	console.log(dimension)
+	
 	for (var i = 0; i < size; i++){
 		var tr = $('<tr />')
 		for (var j = 0; j < size; j++) {
@@ -12,8 +12,15 @@ function renderBlank (size) {
 }
 
 function renderCell (cell, dimension) {
-	var td = $("<td align='center' />").html(cell.value).width(dimension).height(dimension)
-	console.log(cell.value)
+	var td = $("<td align='center' />").html(cell.value+'(' + cell.x + ',' + cell.y + ')'+'#'+cell.cellGroup.groupID).width(dimension).height(dimension)
+	
+	var neighbors = cell.getNeighborsOriented(), groupID = cell.cellGroup.groupID
+	console.log(cell.x, cell.y, neighbors)
+	td.css('border-top', (neighbors.up && (neighbors.up.cellGroup.groupID == groupID)) ? "1px dotted black" : "2px solid black")
+	td.css('border-bottom', (neighbors.down && (neighbors.down.cellGroup.groupID == groupID)) ? "1px dotted black" : "2px solid black")
+	td.css('border-left', (neighbors.left && (neighbors.left.cellGroup.groupID == groupID)) ? "1px dotted black" : "2px solid black")
+	td.css('border-right', (neighbors.right && (neighbors.right.cellGroup.groupID == groupID)) ? "1px dotted black" : "2px solid black")
+	
 	return td
 }
 
