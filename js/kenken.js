@@ -20,7 +20,7 @@ function Kenken (size) {
         for (var y = 0; y < size; y++) {
 			// Fills the board with cells, where each row of cells have the values
 			// of the builderArray, cyclically shifted to the left by x (the row number)
-            this.board[x][y] = new Cell(this, x, y, builderArray[(x+y)%size])
+            this.board[x][y] = new Cell(this, builderArray[(x+y)%size])
         }
     }
 	// Shuffle the board
@@ -38,10 +38,7 @@ function Kenken (size) {
 	var groupID = 1
 	for(var x = 0; x < size; x++) {
 		for(var y = 0; y < size; y++) {
-			console.log('Checking cell with board loction- X: '+x+', Y: '+y)
-			console.log('Actual cell location- X: '+this.board[x][y].x+', Y: '+this.board[x][y].y)
 			if(this.board[x][y].cellGroup == undefined) {
-				console.log('Cell was undefined!')
 				// Generate a random integer in the range [minGroupSize,maxGroupSize] for the size of the group
 				var groupSize = Math.floor((this.maxGroupSize-this.minGroupSize+1)*Math.random()+(this.minGroupSize))
 				// Create the new CellGroup object
@@ -54,12 +51,6 @@ function Kenken (size) {
 				}
 				this.cellGroups.push(newCellGroup)
 				
-				// The code in the following block is purely to make sure cells are working right
-				console.log('Created group of cells with ID: '+groupID+' of wanted size '+groupSize+' but was actually of size '+newCellGroup.cells.length)
-				console.log('Group locations:')
-				for(var k = 0; k < newCellGroup.cells.length; k++) {
-					console.log('Cell with location- X: '+newCellGroup.cells[k].x+', Y: '+newCellGroup.cells[k].y)
-				}
 				
 				groupID = groupID + 1
 			}
@@ -73,7 +64,6 @@ function shuffleBoard (size,board) {
 		// Generate two random integers in the range [0,size)
 		var column1 = Math.floor(size*Math.random())
 		var column2 = Math.floor(size*Math.random())
-		console.log('swapping columns: '+column1+' and '+column2)
 		// Swap the two columns
 		for(var j = 0; j < size; j++) {
 			var tempCell = board[j][column1]
@@ -84,7 +74,6 @@ function shuffleBoard (size,board) {
 		// Generate two random integers in the range [0,size)
 		var row1 = Math.floor(size*Math.random())
 		var row2 = Math.floor(size*Math.random())
-		console.log('swapping rows: '+row1+' and '+row2)
 		// Swap the two rows
 		for(var j = 0; j < size; j++) {
 			var tempCell = board[row1][j]
