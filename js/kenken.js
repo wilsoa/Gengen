@@ -3,7 +3,6 @@ function generateKenken (size) {
     renderKenken(kenken)
 }
 
-
 // A class for the ken ken board
 function Kenken (size) {
     this.size = size
@@ -11,6 +10,7 @@ function Kenken (size) {
 	this.minGroupSize = 1
 	this.maxGroupSize = 5 //TO DO: This should be determined from web page
 	this.cellGroups = []
+	this.operations = [new Addition(),new Subtraction()]
 	
 	
 	var builderArray = shuffledArray(size)
@@ -49,8 +49,8 @@ function Kenken (size) {
 						newCellGroup.grow()
 					}
 				}
+				// TO DO: Use random number and size of the cell group to determine the operation for it
 				this.cellGroups.push(newCellGroup)
-				
 				
 				groupID = groupID + 1
 			}
@@ -115,6 +115,7 @@ CellGroup.prototype.grow = function() {
 			if(neighborCell.cellGroup == undefined) {
 				this.cells.push(neighborCell)
 				neighborCell.setCellGroup(this)
+				this.currentSize = this.currentSize + 1 // Increase the current size count of the cell group
 				return true
 			}
 		}
@@ -192,3 +193,44 @@ function shuffledArray (n) {
 	//return then shuffled array
 	return numberArray
 }
+
+
+/*
+ * The following code is classes for the operations. Not sure if inheritance/abstract functions are a things in 
+ * javascript so currently just making a different class for each of them. Also not sure how to include other files, so just added them
+ * onto the end of kenken.js, should really be in their own file
+ */
+ 
+ // The class for addition
+ function Addition() {
+	 this.minCells = 2 // Can operate on a minimum of 2 cells
+	 this.maxCells = undefined // No max number of cells it can operate on
+ }
+ 
+ // The operation function for addition
+ Addition.prototype.operation = function(arrayOfNumbers) {
+	 var resultOfOperation = 0;
+	 for(var i = 0; i < arrayOfNumbers.length; i++) {
+		 resultOfOperation = arrayOfNumbers[i] + resultOfOperation
+	 }
+	 return resultOfOperation
+ }
+ 
+  // The class for addition
+ function Subtraction() {
+	 this.minCells = 2 // Can operate on a minimum of 2 cells
+	 this.maxCells = 2 // Can operate on a maximum of 2 cells
+ }
+ 
+ // The operation function for subtraction
+ Subtraction.prototype.operation = function(arrayOfNumbers) {
+	 // Should only have two numbers, subtract the smaller one from the larger one
+	 var resultOfOperation = 0;
+	if(arrayOfNumbers[0] > arrayOfNumbers[1]) {
+		resultOfOperation = arrayOfNumbers[0] - arrayOfNumbers[1]
+	} else {
+		resultOfOperation = arrayOfNumbers[1] - arrayOfNumbers[0]
+	}
+	 return resultOfOperation
+ }
+ 
