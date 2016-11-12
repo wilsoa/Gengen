@@ -204,70 +204,90 @@ function shuffledArray (n) {
  * onto the end of kenken.js, should really be in their own file
  */
  
- // The class for addition
- function Addition() {
-	 this.minCells = 2 // Can operate on a minimum of 2 cells
-	 this.maxCells = undefined // No max number of cells it can operate on
- }
+// The class for addition
+function Addition() {
+	this.minCells = 2 // Can operate on a minimum of 2 cells
+	this.maxCells = undefined // No max number of cells it can operate on
+}
  
- // The operation function for addition
- Addition.prototype.operation = function(arrayOfNumbers) {
-	 var resultOfOperation = 0;
-	 for(var i = 0; i < arrayOfNumbers.length; i++) {
-		 resultOfOperation = arrayOfNumbers[i] + resultOfOperation
-	 }
-	 return resultOfOperation
- }
+// The operation function for addition
+Addition.prototype.operation = function(arrayOfNumbers) {
+	// Verify that array length is within the size constraints, if not return 0 meaning the operation failed
+	if(arrayOfNumbers.length > this.maxCells || arrayOfNumbers.length < this.minCells) {
+		return 0
+	}
+	 
+	var resultOfOperation = 0;
+	for(var i = 0; i < arrayOfNumbers.length; i++) {
+		resultOfOperation = arrayOfNumbers[i] + resultOfOperation
+	}
+	return resultOfOperation
+}
  
-  // The class for subtraction
- function Subtraction() {
-	 this.minCells = 2 // Can operate on a minimum of 2 cells
-	 this.maxCells = 2 // Can operate on a maximum of 2 cells
- }
+// The class for subtraction
+function Subtraction() {
+	this.minCells = 2 // Can operate on a minimum of 2 cells
+	this.maxCells = 2 // Can operate on a maximum of 2 cells
+}
  
- // The operation function for subtraction
- Subtraction.prototype.operation = function(arrayOfNumbers) {
-	 // Should only have two numbers, subtract the smaller one from the larger one
-	 var resultOfOperation = 0;
+// The operation function for subtraction
+Subtraction.prototype.operation = function(arrayOfNumbers) {
+	// Verify that array length is within the size constraints, if not return 0 meaning the operation failed
+	if(arrayOfNumbers.length > this.maxCells || arrayOfNumbers.length < this.minCells) {
+		return 0
+	}
+	 
+	// Should only have two numbers, subtract the smaller one from the larger one
+	var resultOfOperation = 0;
 	if(arrayOfNumbers[0] > arrayOfNumbers[1]) {
 		resultOfOperation = arrayOfNumbers[0] - arrayOfNumbers[1]
 	} else {
 		resultOfOperation = arrayOfNumbers[1] - arrayOfNumbers[0]
 	}
-	 return resultOfOperation
+	return resultOfOperation
  }
  
- // The class for multiplication
- function Multiplication() {
-	 this.minCells = 2 // Can operate on a minimum of 2 cells
-	 this.maxCells = undefined // No max number of cells it can operate on
+// The class for multiplication
+function Multiplication() {
+	this.minCells = 2 // Can operate on a minimum of 2 cells
+	this.maxCells = undefined // No max number of cells it can operate on
  }
  
- // The operation function for multiplication
- Multiplication.prototype.operation = function(arrayOfNumbers) {
-	 var resultOfOperation = 1;
-	 for(var i = 0; i < arrayOfNumbers.length; i++) {
-		 resultOfOperation = arrayOfNumbers[i] * resultOfOperation
-	 }
-	 return resultOfOperation
- }
+// The operation function for multiplication
+Multiplication.prototype.operation = function(arrayOfNumbers) {
+	// Verify that array length is within the size constraints, if not return 0 meaning the operation failed
+	if(arrayOfNumbers.length > this.maxCells || arrayOfNumbers.length < this.minCells) {
+		return 0
+	}
+	
+	var resultOfOperation = 1;
+	for(var i = 0; i < arrayOfNumbers.length; i++) {
+		resultOfOperation = arrayOfNumbers[i] * resultOfOperation
+	}
+	return resultOfOperation
+}
  
-  // The class for division
- function Division() {
-	 this.minCells = 2 // Can operate on a minimum of 2 cells
-	 this.maxCells = 2 // Can operate on a maximum of 2 cells
- }
+// The class for division
+function Division() {
+	this.minCells = 2 // Can operate on a minimum of 2 cells
+	this.maxCells = 2 // Can operate on a maximum of 2 cells
+}
  
- // The operation function for division
- Division.prototype.operation = function(arrayOfNumbers) {
-	 // Should only have two numbers, check to see if they divide evenly. If not, return 0 indicating division failure
-	 var resultOfOperation = 0;
-	 if((arrayOfNumbers[0]/arrayOfNumbers[1])%1==0) {
-		 // If true, then this was an integer
-		 resultOfOperation = arrayOfNumbers[0]/arrayOfNumbers[1]
-	 } else if((arrayOfNumbers[1]/arrayOfNumbers[0])%1==0) {
-		 // If true, then this was an integer
-		 resultOfOperation = arrayOfNumbers[1]/arrayOfNumbers[0]
-	 }
-	 return resultOfOperation
- }
+// The operation function for division
+Division.prototype.operation = function(arrayOfNumbers) {
+	// Verify that array length is within the size constraints, if not return 0 meaning the operation failed
+	if(arrayOfNumbers.length > this.maxCells || arrayOfNumbers.length < this.minCells) {
+		return 0
+	}
+	
+	// Should only have two numbers, check to see if they divide evenly. If not, return 0 indicating division failure
+	var resultOfOperation = 0;
+	if((arrayOfNumbers[0]/arrayOfNumbers[1])%1==0) {
+		// If true, then this was an integer
+		resultOfOperation = arrayOfNumbers[0]/arrayOfNumbers[1]
+	} else if((arrayOfNumbers[1]/arrayOfNumbers[0])%1==0) {
+		// If true, then this was an integer
+		resultOfOperation = arrayOfNumbers[1]/arrayOfNumbers[0]
+	}
+	return resultOfOperation
+}
