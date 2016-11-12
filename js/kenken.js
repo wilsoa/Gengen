@@ -8,9 +8,11 @@ function Kenken (size) {
     this.size = size
     this.board = []
 	this.minGroupSize = 1
-	this.maxGroupSize = 5 //TO DO: This should be determined from web page
+	this.maxGroupSize = 5 //TO DO: This should be determined from web page, or from the types of operations (if only division of something
+	// with max cellgroup operation size of 2, cannot have groups of more than 2, and so on)
 	this.cellGroups = []
-	this.operations = [new Addition(),new Subtraction()]
+	// TO DO: Make this based off of operations allowed on webpage
+	this.operations = [new Addition(),new Subtraction(),new Multiplication(),new Division()]
 	
 	
 	var builderArray = shuffledArray(size)
@@ -50,6 +52,7 @@ function Kenken (size) {
 					}
 				}
 				// TO DO: Use random number and size of the cell group to determine the operation for it
+				//  Remember: Can only use division of numbers divide evenly
 				this.cellGroups.push(newCellGroup)
 				
 				groupID = groupID + 1
@@ -216,7 +219,7 @@ function shuffledArray (n) {
 	 return resultOfOperation
  }
  
-  // The class for addition
+  // The class for subtraction
  function Subtraction() {
 	 this.minCells = 2 // Can operate on a minimum of 2 cells
 	 this.maxCells = 2 // Can operate on a maximum of 2 cells
@@ -234,3 +237,37 @@ function shuffledArray (n) {
 	 return resultOfOperation
  }
  
+ // The class for multiplication
+ function Multiplication() {
+	 this.minCells = 2 // Can operate on a minimum of 2 cells
+	 this.maxCells = undefined // No max number of cells it can operate on
+ }
+ 
+ // The operation function for multiplication
+ Multiplication.prototype.operation = function(arrayOfNumbers) {
+	 var resultOfOperation = 1;
+	 for(var i = 0; i < arrayOfNumbers.length; i++) {
+		 resultOfOperation = arrayOfNumbers[i] * resultOfOperation
+	 }
+	 return resultOfOperation
+ }
+ 
+  // The class for division
+ function Division() {
+	 this.minCells = 2 // Can operate on a minimum of 2 cells
+	 this.maxCells = 2 // Can operate on a maximum of 2 cells
+ }
+ 
+ // The operation function for division
+ Division.prototype.operation = function(arrayOfNumbers) {
+	 // Should only have two numbers, check to see if they divide evenly. If not, return 0 indicating division failure
+	 var resultOfOperation = 0;
+	 if((arrayOfNumbers[0]/arrayOfNumbers[1])%1==0) {
+		 // If true, then this was an integer
+		 resultOfOperation = arrayOfNumbers[0]/arrayOfNumbers[1]
+	 } else if((arrayOfNumbers[1]/arrayOfNumbers[0])%1==0) {
+		 // If true, then this was an integer
+		 resultOfOperation = arrayOfNumbers[1]/arrayOfNumbers[0]
+	 }
+	 return resultOfOperation
+ }
