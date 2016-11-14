@@ -66,7 +66,7 @@ function Kenken (size) {
 					else {
 						// Not a valid operation, move on to the next options
 						randomOperation = (randomOperation + 1) % this.operations.length
-						if(randomOperation = randomOperationStart) {
+						if(randomOperation == randomOperationStart) {
 							console.log('no valid operation was found')
 							break
 						}
@@ -127,7 +127,7 @@ function CellGroup (kenken, cell, id) {
 CellGroup.prototype.getAllValues = function() {
 	var returnArray = []
 	for(var i = 0; i < this.cells.length; i++) {
-		returnArray.push(this.cells[i])
+		returnArray.push(this.cells[i].value)
 	}
 	return returnArray
 }
