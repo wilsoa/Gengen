@@ -1,10 +1,12 @@
-function generateKenken (size) {
-    var kenken = new Kenken(size)
+function generateKenken (size, seed) {
+	if (!seed) seed = new Date().getTime()
+    var kenken = new Kenken(size, seed)
     renderKenken(kenken)
+    location.hash = size + ':' + seed
 }
 
 // A class for the ken ken board
-function Kenken (size) {
+function Kenken (size, seed) {
     this.size = size
     this.board = []
 	this.minGroupSize = 1
@@ -13,9 +15,9 @@ function Kenken (size) {
 	this.cellGroups = []
 	// TO DO: Make this based off of operations allowed on webpage
 	this.operations = [new Addition(),new Subtraction(),new Multiplication(),new Division(),new SingleCell()]
+	this.seed = new MersenneTwister(seed)
 	
-	
-	var builderArray = shuffledArray(size)
+	var builderArray = shuffledArray(size, this.seed)
     
     for (var x = 0; x < size; x++) {
         this.board[x] = []
@@ -26,7 +28,7 @@ function Kenken (size) {
         }
     }
 	// Shuffle the board
-	shuffleBoard(size,this.board)
+	shuffleBoard(size,this.board, this.seed)
 	
 	// Assign cells in the now shuffled board x and y values
 	for(var x = 0; x < size; x++) {
@@ -42,7 +44,7 @@ function Kenken (size) {
 		for(var y = 0; y < size; y++) {
 			if(this.board[x][y].cellGroup == undefined) {
 				// Generate a random integer in the range [minGroupSize,maxGroupSize] for the size of the group
-				var groupSize = Math.floor((this.maxGroupSize-this.minGroupSize+1)*Math.random()+(this.minGroupSize))
+				var groupSize = Math.floor((this.maxGroupSize-this.minGroupSize+1)*this.seed.random()+(this.minGroupSize))
 				// Create the new CellGroup object
 				var newCellGroup = new CellGroup(this, this.board[x][y], groupID)
 				// Grow the new cell group groupSize-1 times, only if the groupSize is not one (since it already has size one)
@@ -53,7 +55,7 @@ function Kenken (size) {
 				}
 				
 				// Generate random integer in the range [0,this.operations.length-1]
-				var randomOperationStart = Math.floor(this.operations.length*Math.random())
+				var randomOperationStart = Math.floor(this.operations.length*this.seed.random())
 				var randomOperation = randomOperationStart
 				// Runs until valid operation is found, should never infinite loop as there should always be a valid operation
 				var foundOperation = false
@@ -82,12 +84,12 @@ function Kenken (size) {
 	}
 }
 
-function shuffleBoard (size,board) {
+function shuffleBoard (size,board,seed) {
 	// Swap two columns and then two rows. Do this 'size' times to get a decent mix up of the board.
 	for (var i = 0; i < size; i++) {
 		// Generate two random integers in the range [0,size)
-		var column1 = Math.floor(size*Math.random())
-		var column2 = Math.floor(size*Math.random())
+		var column1 = Math.floor(size*seed.random())
+		var column2 = Math.floor(size*seed.random())
 		// Swap the two columns
 		for(var j = 0; j < size; j++) {
 			var tempCell = board[j][column1]
@@ -96,8 +98,8 @@ function shuffleBoard (size,board) {
 		}
 		
 		// Generate two random integers in the range [0,size)
-		var row1 = Math.floor(size*Math.random())
-		var row2 = Math.floor(size*Math.random())
+		var row1 = Math.floor(size*seed.random())
+		var row2 = Math.floor(size*seed.random())
 		// Swap the two rows
 		for(var j = 0; j < size; j++) {
 			var tempCell = board[row1][j]
@@ -136,14 +138,14 @@ CellGroup.prototype.getAllValues = function() {
 // Returns true if growing was successful, false if it was unsuccessful
 CellGroup.prototype.grow = function() {
 	// Generate a random integer in range [0,cells.length-1] for which cell we should attempt to grow at first
-	var startingCellNumber = Math.floor(this.cells.length*Math.random())
+	var startingCellNumber = Math.floor(this.cells.length*this.kenken.seed.random())
 	var cellNum = startingCellNumber
 	while(true) {
 		var cellToGrowFrom = this.cells[cellNum]
 		// Get the array of neighbors of this cell
 		var cellNeighbors = cellToGrowFrom.getNeighbors()
 		//Generate a random integer in range [0,cellNeighbors.length-1]
-		var neighborCellNum = Math.floor(cellNeighbors.length*Math.random())
+		var neighborCellNum = Math.floor(cellNeighbors.length*this.kenken.seed.random())
 		// Go through each neighbor. If one is valid, make it the next cell in this group.
 		for(var i = 0; i < cellNeighbors.length; i++) {
 			var neighborCell = cellNeighbors[((i+neighborCellNum)%cellNeighbors.length)]
@@ -195,10 +197,23 @@ Cell.prototype.setCellGroup = function(cellGroup) {
 Cell.prototype.getNeighbors = function () {
     var neighbors = []
     
-    if (this.x > 0) neighbors.push(this.kenken.board[this.x-1][this.y])
-    if (this.y > 0) neighbors.push(this.kenken.board[this.x][this.y-1])
-    if (this.x < this.kenken.size - 1) neighbors.push(this.kenken.board[this.x+1][this.y])
-    if (this.y < this.kenken.size - 1) neighbors.push(this.kenken.board[this.x][this.y+1])
+    if ($("#torus").is(":checked")) {
+    	if (this.x > 0) neighbors.push(this.kenken.board[this.x-1][this.y])
+    	else neighbors.push(this.kenken.board[this.kenken.size-1][this.y])
+	    if (this.y > 0) neighbors.push(this.kenken.board[this.x][this.y-1])
+    	else neighbors.push(this.kenken.board[this.x][this.kenken.size-1])
+	    if (this.x < this.kenken.size - 1) neighbors.push(this.kenken.board[this.x+1][this.y])
+    	else neighbors.push(this.kenken.board[0][this.y])
+	    if (this.y < this.kenken.size - 1) neighbors.push(this.kenken.board[this.x][this.y+1])
+    	else neighbors.push(this.kenken.board[this.x][0])
+    }
+    else
+    {
+	    if (this.x > 0) neighbors.push(this.kenken.board[this.x-1][this.y])
+	    if (this.y > 0) neighbors.push(this.kenken.board[this.x][this.y-1])
+	    if (this.x < this.kenken.size - 1) neighbors.push(this.kenken.board[this.x+1][this.y])
+	    if (this.y < this.kenken.size - 1) neighbors.push(this.kenken.board[this.x][this.y+1])
+    }
     
     return neighbors
 }
@@ -207,16 +222,25 @@ Cell.prototype.getNeighbors = function () {
 Cell.prototype.getNeighborsOriented = function () {
     var neighbors = {}
     
-    if (this.x > 0) neighbors.left = this.kenken.board[this.x-1][this.y]
-    if (this.y > 0) neighbors.up = this.kenken.board[this.x][this.y-1]
-    if (this.x < this.kenken.size - 1) neighbors.right = this.kenken.board[this.x+1][this.y]
-    if (this.y < this.kenken.size - 1) neighbors.down = this.kenken.board[this.x][this.y+1]
+    if ($("#torus").is(":checked")) {
+    	neighbors.left=this.x > 0 ? this.kenken.board[this.x-1][this.y] : this.kenken.board[this.kenken.size-1][this.y]
+    	neighbors.up = this.y > 0 ? this.kenken.board[this.x][this.y-1] : this.kenken.board[this.x][this.kenken.size-1]
+	    neighbors.right = this.x < this.kenken.size - 1 ? this.kenken.board[this.x+1][this.y] : this.kenken.board[0][this.y]
+		neighbors.down = this.y < this.kenken.size - 1 ? this.kenken.board[this.x][this.y+1] : this.kenken.board[this.x][0]
+    }
+    else
+    {
+	    if (this.x > 0) neighbors.left = this.kenken.board[this.x-1][this.y]
+	    if (this.y > 0) neighbors.up = this.kenken.board[this.x][this.y-1]
+	    if (this.x < this.kenken.size - 1) neighbors.right = this.kenken.board[this.x+1][this.y]
+	    if (this.y < this.kenken.size - 1) neighbors.down = this.kenken.board[this.x][this.y+1]
+    }
     
     return neighbors
 }
 
 // Function to generate an array with the numbers 1 through n in a random order
-function shuffledArray (n) {
+function shuffledArray (n, seed) {
 	var numberArray=[]
 	// Fill the array with numbers 1 through n
 	for(var i = 0; i < n; i++) {
@@ -228,8 +252,8 @@ function shuffledArray (n) {
 	// first element problem. (First element would never end up in first spot)
 	for (var i = 0; i < n-1; i++) {
 		// Generate a random integer in the range [i,n-1]
-		// Since Math.random() generates a number in the range [0,1)
-		var randomNum = Math.floor((n-i)*Math.random()+i)
+		// Since seed.random() generates a number in the range [0,1)
+		var randomNum = Math.floor((n-i)*seed.random()+i)
 		
 		//swap the array at spots i and randomNum
 		var numToSwap = numberArray[i]

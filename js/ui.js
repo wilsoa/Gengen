@@ -22,4 +22,9 @@ $(function () {
 	$("#generate").button().on("click", function (){
 		generateKenken($("#size").spinner("value"))
 	})
+	
+	if (location.hash) {
+		var settings = location.hash.substr(1).split(':')
+		generateKenken(+settings[0], +settings[1])
+	}
 })

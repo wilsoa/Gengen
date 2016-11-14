@@ -3,6 +3,7 @@
 		<title>Gengen&ndash;a Kenken generator</title>
 		<script src="js/jquery-3.1.1.min.js"></script>
 		<script src="js/jquery-ui.min.js"></script>
+		<script src="js/mersenne-twister.js"></script>
 		<script src="js/kenken.js"></script>
 		<script src="js/render.js"></script>
 		<link rel="stylesheet" href="css/jquery-ui.min.css" />
@@ -24,6 +25,13 @@
 				  <label for="multiplication">&times;</label>
 				  <input type="checkbox" name="division" id="division">
 				  <label for="division">&divide;</label>
+			  </div>
+			</fieldset>
+			<fieldset>
+			  <legend>Oddities</legend>
+			  <div id="operations">
+				  <input type="checkbox" name="torus" id="torus">
+				  <label for="torus">Torus</label>
 			  </div>
 			</fieldset>
 			<button id="generate">Generate</button>
