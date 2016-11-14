@@ -12,7 +12,7 @@ function Kenken (size) {
 	// with max cellgroup operation size of 2, cannot have groups of more than 2, and so on)
 	this.cellGroups = []
 	// TO DO: Make this based off of operations allowed on webpage
-	this.operations = [new Addition(),new Subtraction(),new Multiplication(),new Division()]
+	this.operations = [new Addition(),new Subtraction(),new Multiplication(),new Division(),new SingleCell()]
 	
 	
 	var builderArray = shuffledArray(size)
@@ -51,8 +51,23 @@ function Kenken (size) {
 						newCellGroup.grow()
 					}
 				}
-				// TO DO: Use random number and size of the cell group to determine the operation for it
-				//  Remember: Can only use division of numbers divide evenly
+				
+				// Generate random integer in the range [0,this.operations.length-1]
+				var randomOperation = Math.floor(this.operations.length*Math.random())
+				// Runs until valid operation is found, should never infinite loop as there should always be a valid operation
+				var foundOperation = false
+				while(foundOperation == false) {
+					if(this.operations[randomOperation].operation(newCellGroup.getAllValues()) != 0) {
+						// A valid operation was found, set the operation text for the group
+						newCellGroup.operationDescription = this.operations[randomOperation].symbol + this.operations[randomOperation].operation(newCellGroup.getAllValues())
+					}
+					else {
+						// Not a valid operation, move on to the next options
+						randomOperation = (randomOperation + 1) % this.operations.length
+					}
+				}
+
+				// Add the new cell group to the kenken cell group member variable
 				this.cellGroups.push(newCellGroup)
 				
 				groupID = groupID + 1
@@ -98,6 +113,17 @@ function CellGroup (kenken, cell, id) {
 	cell.setCellGroup(this)
 	// The current size of the cell group
 	this.currentSize = 1
+	// The variable for the string showing the operation and result this cell should have
+	this.operationDescription = undefined
+}
+
+// Return the values of all cells in the group as an array
+CellGroup.prototype.getAllValues = function() {
+	var returnArray = []
+	for(var i = 0; i < this.cells.length; i++) {
+		returnArray.push(cells[i])
+	}
+	return returnArray
 }
 
 // Grow the cell group up to maximum size, or smaller if board is not big enough
@@ -204,10 +230,28 @@ function shuffledArray (n) {
  * onto the end of kenken.js, should really be in their own file
  */
  
+// The class for no operation, used for a single cell
+function SingleCell() {
+	this.minCells = 1 // Can operate on a minimum of 1 cell
+	this.maxCells = 1 // Can operate on a maximum of 1 cell
+	this.symbol = ''
+}
+ 
+// The operation function for a single cell
+SingleCell.prototype.operation = function(arrayOfNumbers) {
+	// Verify that array length is within the size constraints, if not return 0 meaning the operation failed
+	if(arrayOfNumbers.length > this.maxCells || arrayOfNumbers.length < this.minCells) {
+		return 0
+	}
+
+	return arrayOfNumbers[0]
+}
+ 
 // The class for addition
 function Addition() {
 	this.minCells = 2 // Can operate on a minimum of 2 cells
 	this.maxCells = undefined // No max number of cells it can operate on
+	this.symbol = '+'
 }
  
 // The operation function for addition
@@ -228,6 +272,7 @@ Addition.prototype.operation = function(arrayOfNumbers) {
 function Subtraction() {
 	this.minCells = 2 // Can operate on a minimum of 2 cells
 	this.maxCells = 2 // Can operate on a maximum of 2 cells
+	this.symbol = '-'
 }
  
 // The operation function for subtraction
@@ -251,6 +296,7 @@ Subtraction.prototype.operation = function(arrayOfNumbers) {
 function Multiplication() {
 	this.minCells = 2 // Can operate on a minimum of 2 cells
 	this.maxCells = undefined // No max number of cells it can operate on
+	this.symbol = '*'
  }
  
 // The operation function for multiplication
@@ -271,6 +317,7 @@ Multiplication.prototype.operation = function(arrayOfNumbers) {
 function Division() {
 	this.minCells = 2 // Can operate on a minimum of 2 cells
 	this.maxCells = 2 // Can operate on a maximum of 2 cells
+	this.symbol = '/'
 }
  
 // The operation function for division
