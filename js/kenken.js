@@ -53,17 +53,23 @@ function Kenken (size) {
 				}
 				
 				// Generate random integer in the range [0,this.operations.length-1]
-				var randomOperation = Math.floor(this.operations.length*Math.random())
+				var randomOperationStart = Math.floor(this.operations.length*Math.random())
+				var randomOperation = randomOperationStart
 				// Runs until valid operation is found, should never infinite loop as there should always be a valid operation
 				var foundOperation = false
 				while(foundOperation == false) {
 					if(this.operations[randomOperation].operation(newCellGroup.getAllValues()) != 0) {
 						// A valid operation was found, set the operation text for the group
 						newCellGroup.operationDescription = this.operations[randomOperation].symbol + this.operations[randomOperation].operation(newCellGroup.getAllValues())
+						foundOperation = true
 					}
 					else {
 						// Not a valid operation, move on to the next options
 						randomOperation = (randomOperation + 1) % this.operations.length
+						if(randomOperation = randomOperationStart) {
+							console.log('no valid operation was found')
+							break
+						}
 					}
 				}
 
@@ -121,7 +127,7 @@ function CellGroup (kenken, cell, id) {
 CellGroup.prototype.getAllValues = function() {
 	var returnArray = []
 	for(var i = 0; i < this.cells.length; i++) {
-		returnArray.push(cells[i])
+		returnArray.push(this.cells[i])
 	}
 	return returnArray
 }
