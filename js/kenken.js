@@ -165,6 +165,18 @@ CellGroup.prototype.grow = function() {
 	}
 }
 
+CellGroup.prototype.getTopLeft = function () {
+	var cells = this.cells, topLeftCell = cells[0]
+	
+	for (var i = 1; i < cells.length; i++) {
+		if (cells[i].x <= topLeftCell.x) {
+			if (cells[i].y < topLeftCell.y) topLeftCell = cells[i]
+		}
+	}
+	
+	return topLeftCell
+}
+
 // A class for a single cell in the Kenken which houses data on the cell and methods for finding adjacent cells
 function Cell (kenken, value) {
     this.kenken = kenken
@@ -302,7 +314,7 @@ Subtraction.prototype.operation = function(arrayOfNumbers) {
 function Multiplication() {
 	this.minCells = 2 // Can operate on a minimum of 2 cells
 	this.maxCells = undefined // No max number of cells it can operate on
-	this.symbol = '*'
+	this.symbol = '&times;'
  }
  
 // The operation function for multiplication
@@ -323,7 +335,7 @@ Multiplication.prototype.operation = function(arrayOfNumbers) {
 function Division() {
 	this.minCells = 2 // Can operate on a minimum of 2 cells
 	this.maxCells = 2 // Can operate on a maximum of 2 cells
-	this.symbol = '/'
+	this.symbol = '&divide;'
 }
  
 // The operation function for division

@@ -10,8 +10,18 @@
     vertical-align:middle;
     font-size: 16px;
     font-size: 2vw;
+    position: relative;
 }
 
 #controls {
 	float: left;
+}
+
+.hint {
+    position: absolute;
+    font-size: 60%;
+    font-weight: bold;
+    color: rgba(0, 0, 0, .8);
+    top: 0px;
+    left: 0px;
 }
