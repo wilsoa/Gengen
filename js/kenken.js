@@ -64,7 +64,7 @@ function Kenken (size, settings, seed) {
 				// Runs until valid operation is found, should never infinite loop as there should always be a valid operation
 				var foundOperation = false
 				while(foundOperation == false) {
-					if(this.operations[randomOperation].operation(newCellGroup.getAllValues()) != 0) {
+					if(this.operations[randomOperation].operation(newCellGroup.getAllValues()) != false) {
 						// A valid operation was found, set the operation text for the group
 						newCellGroup.operationDescription = this.operations[randomOperation].symbol + this.operations[randomOperation].operation(newCellGroup.getAllValues())
 						foundOperation = true
@@ -287,7 +287,7 @@ function SingleCell() {
 SingleCell.prototype.operation = function(arrayOfNumbers) {
 	// Verify that array length is within the size constraints, if not return 0 meaning the operation failed
 	if(arrayOfNumbers.length > this.maxCells || arrayOfNumbers.length < this.minCells) {
-		return 0
+		return false
 	}
 
 	return arrayOfNumbers[0]
@@ -304,7 +304,7 @@ function Addition() {
 Addition.prototype.operation = function(arrayOfNumbers) {
 	// Verify that array length is within the size constraints, if not return 0 meaning the operation failed
 	if(arrayOfNumbers.length > this.maxCells || arrayOfNumbers.length < this.minCells) {
-		return 0
+		return false
 	}
 	 
 	var resultOfOperation = 0;
@@ -325,11 +325,11 @@ function Subtraction() {
 Subtraction.prototype.operation = function(arrayOfNumbers) {
 	// Verify that array length is within the size constraints, if not return 0 meaning the operation failed
 	if(arrayOfNumbers.length > this.maxCells || arrayOfNumbers.length < this.minCells) {
-		return 0
+		return false
 	}
 	 
 	// Should only have two numbers, subtract the smaller one from the larger one
-	var resultOfOperation = 0;
+	var resultOfOperation = false;
 	if(arrayOfNumbers[0] > arrayOfNumbers[1]) {
 		resultOfOperation = arrayOfNumbers[0] - arrayOfNumbers[1]
 	} else {
@@ -349,7 +349,7 @@ function Multiplication() {
 Multiplication.prototype.operation = function(arrayOfNumbers) {
 	// Verify that array length is within the size constraints, if not return 0 meaning the operation failed
 	if(arrayOfNumbers.length > this.maxCells || arrayOfNumbers.length < this.minCells) {
-		return 0
+		return false
 	}
 	
 	var resultOfOperation = 1;
@@ -370,11 +370,11 @@ function Division() {
 Division.prototype.operation = function(arrayOfNumbers) {
 	// Verify that array length is within the size constraints, if not return 0 meaning the operation failed
 	if(arrayOfNumbers.length > this.maxCells || arrayOfNumbers.length < this.minCells) {
-		return 0
+		return false
 	}
 	
 	// Should only have two numbers, check to see if they divide evenly. If not, return 0 indicating division failure
-	var resultOfOperation = 0;
+	var resultOfOperation = false;
 	if((arrayOfNumbers[0]/arrayOfNumbers[1])%1==0) {
 		// If true, then this was an integer
 		resultOfOperation = arrayOfNumbers[0]/arrayOfNumbers[1]
