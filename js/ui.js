@@ -21,7 +21,12 @@ $(function () {
 	
 	$("#generate").button().on("click", function (){
 		generateKenken($("#size").spinner("value"), {
-			
+			operations: {
+				addition: $("#addition").is(":checked"),
+				subtraction: $("#subtraction").is(":checked"),
+				multiplication: $("#multiplication").is(":checked"),
+				division: $("#division").is(":checked")
+			}
 		})
 	})
 	
