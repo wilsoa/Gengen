@@ -1,13 +1,17 @@
-function generateKenken (size, seed) {
+var currentKenken
+
+function generateKenken (size, settings, seed) {
 	if (!seed) seed = new Date().getTime()
-    var kenken = new Kenken(size, seed)
+    var kenken = new Kenken(size, settings, seed)
+    currentKenken = kenken
     renderKenken(kenken)
-    location.hash = size + ':' + seed
+    location.hash = btoa(JSON.stringify([size, settings, seed]))
 }
 
 // A class for the ken ken board
-function Kenken (size, seed) {
+function Kenken (size, settings, seed) {
     this.size = size
+    this.settings = settings
     this.board = []
 	this.minGroupSize = 1
 	this.maxGroupSize = 5 //TO DO: This should be determined from web page, or from the types of operations (if only division of something

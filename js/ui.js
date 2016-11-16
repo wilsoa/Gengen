@@ -20,11 +20,13 @@ $(function () {
 	$("[type=checkbox]").button()
 	
 	$("#generate").button().on("click", function (){
-		generateKenken($("#size").spinner("value"))
+		generateKenken($("#size").spinner("value"), {
+			
+		})
 	})
 	
 	if (location.hash) {
-		var settings = location.hash.substr(1).split(':')
-		generateKenken(+settings[0], +settings[1])
+		var hash = JSON.parse(atob(location.hash.substr(1)))
+		generateKenken(hash[0], hash[1], hash[2])
 	}
 })
