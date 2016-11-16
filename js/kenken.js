@@ -14,7 +14,7 @@ function Kenken (size, settings, seed) {
     this.settings = settings
     this.board = []
 	this.minGroupSize = 1
-	this.defaultMaxGroupSize = 5
+	this.defaultMaxGroupSize = settings.maxGroupSize
 	this.maxGroupSize = undefined //TO DO: This should be determined from web page, or from the types of operations (if only division of something
 	// with max cellgroup operation size of 2, cannot have groups of more than 2, and so on)
 	this.cellGroups = []
@@ -46,6 +46,10 @@ function Kenken (size, settings, seed) {
 		} else if(maxOperationSize > this.maxGroupSize) {
 			this.maxGroupSize = maxOperationSize
 		}
+	}
+	// If the max group size determined on the webpage is smaller than the max from the operations, make this the max group size
+	if(this.maxGroupSize > this.defaultMaxGroupSize) {
+		this.maxGroupSize = this.defaultMaxGroupSize
 	}
 	console.log('maximmum operation size is: '+this.maxGroupSize)
 	
