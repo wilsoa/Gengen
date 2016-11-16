@@ -14,11 +14,41 @@ function Kenken (size, settings, seed) {
     this.settings = settings
     this.board = []
 	this.minGroupSize = 1
-	this.maxGroupSize = 5 //TO DO: This should be determined from web page, or from the types of operations (if only division of something
+	this.defaultMaxGroupSize = 5
+	this.maxGroupSize = undefined //TO DO: This should be determined from web page, or from the types of operations (if only division of something
 	// with max cellgroup operation size of 2, cannot have groups of more than 2, and so on)
 	this.cellGroups = []
-	// TO DO: Make this based off of operations allowed on webpage
-	this.operations = [new Addition(),new Subtraction(),new Multiplication(),new Division(),new SingleCell()]
+	// Determine operation based on checkboxes from webpage
+	this.operations = [new SingleCell()]
+	if(settings.operations.addition) {
+		this.operations.push(new Addition())
+	}
+	if(settings.operations.subtraction) {
+		this.operations.push(new Subtraction())
+	}
+	if(settings.operations.multiplication) {
+		this.operations.push(new Multiplication())
+	}
+	if(settings.operations.division) {
+		this.operations.push(new Division())
+	}
+	
+	//Determine if the default maxGroupSize needs to be made smaller due to the operations selected
+	for(var i = 0; i < this.operations.length; i++) {
+		var maxOperationSize = this.operations[i].maxCells
+		if(maxOperationSize == undefined) {
+			// There is an operation with no maximum cell group size, so use the deafult max size (or the size from the webpage)
+			this.maxGroupSize = this.defaultMaxGroupSize
+			// Stop the loop
+			i = this.operations.length
+		} else if(this.maxGroupSize == undefined) {
+			this.maxGroupSize = maxOperationSize
+		} else if(maxOperationSize > this.maxGroupSize) {
+			this.maxGroupSize = maxOperationSize
+		}
+	}
+	console.log('maximmum operation size is: '+this.maxGroupSize)
+	
 	this.seed = new MersenneTwister(seed)
 	
 	var builderArray = shuffledArray(size, this.seed)
