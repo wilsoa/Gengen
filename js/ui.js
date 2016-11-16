@@ -10,6 +10,11 @@ $(function () {
 		max: 20
 	})
 	
+	$("#groupSize").spinner({
+		min: 2,
+		max: 8
+	})
+	
 	$("#difficulty").spinner({
 		min: 1,
 		max: 5
@@ -26,7 +31,9 @@ $(function () {
 				subtraction: $("#subtraction").is(":checked"),
 				multiplication: $("#multiplication").is(":checked"),
 				division: $("#division").is(":checked")
-			}
+			},
+			difficulty: $("#difficulty").spinner("value"),
+			maxGroupSize: $("#groupSize").spinner("value")
 		})
 	})
 	
