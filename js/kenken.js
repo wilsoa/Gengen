@@ -1,16 +1,15 @@
-var currentKenken
-
-function generateKenken (size, settings, seed) {
-	if (!seed) seed = new Date().getTime()
-    var kenken = new Kenken(size, settings, seed)
-    currentKenken = kenken
+function generateKenken (settings) {
+	if (!settings.seed) settings.seed = new Date().getTime()
+    
+    var kenken = new Kenken(settings)
     renderKenken(kenken)
-    location.hash = btoa(JSON.stringify([size, settings, seed]))
+    location.hash = encodeOptions(settings)
+    return kenken
 }
 
 // A class for the ken ken board
-function Kenken (size, settings, seed) {
-    this.size = size
+function Kenken (settings) {
+    var size = this.size = settings.size
     this.settings = settings
     this.board = []
 	this.minGroupSize = 1
@@ -53,7 +52,7 @@ function Kenken (size, settings, seed) {
 	}
 	console.log('maximmum operation size is: '+this.maxGroupSize)
 	
-	this.seed = new MersenneTwister(seed)
+	this.seed = new MersenneTwister(settings.seed)
 	
 	var builderArray = shuffledArray(size, this.seed)
     
@@ -235,7 +234,7 @@ Cell.prototype.setCellGroup = function(cellGroup) {
 Cell.prototype.getNeighbors = function () {
     var neighbors = []
     
-    if ($("#torus").is(":checked")) {
+    if (this.kenken.settings.torus) {
     	if (this.x > 0) neighbors.push(this.kenken.board[this.x-1][this.y])
     	else neighbors.push(this.kenken.board[this.kenken.size-1][this.y])
 	    if (this.y > 0) neighbors.push(this.kenken.board[this.x][this.y-1])
@@ -260,7 +259,7 @@ Cell.prototype.getNeighbors = function () {
 Cell.prototype.getNeighborsOriented = function () {
     var neighbors = {}
     
-    if ($("#torus").is(":checked")) {
+    if (this.kenken.settings.torus) {
     	neighbors.left=this.x > 0 ? this.kenken.board[this.x-1][this.y] : this.kenken.board[this.kenken.size-1][this.y]
     	neighbors.up = this.y > 0 ? this.kenken.board[this.x][this.y-1] : this.kenken.board[this.x][this.kenken.size-1]
 	    neighbors.right = this.x < this.kenken.size - 1 ? this.kenken.board[this.x+1][this.y] : this.kenken.board[0][this.y]

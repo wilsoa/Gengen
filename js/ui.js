@@ -1,10 +1,23 @@
 $(function () {
+	var defaultOptions = {
+		size: 5
+	}
+	
+	if (location.hash) {
+		try{
+			defaultOptions = decodeOptions(location.hash.substr(1))
+			console.log(defaultOptions)
+			generateKenken(defaultOptions)
+		}catch(e){console.log(e)}
+	}
+	else
+	{
+		renderBlank(defaultOptions.size)
+	}
+	
 	$("#size").spinner({
 		spin: function (event, ui) {
 			renderBlank(ui.value)
-		},
-		create: function (event, ui) {
-			renderBlank(this.value)
 		},
 		min: 2,
 		max: 20
@@ -25,7 +38,8 @@ $(function () {
 	$("[type=checkbox]").button()
 	
 	$("#generate").button().on("click", function (){
-		generateKenken($("#size").spinner("value"), {
+		generateKenken({
+			size: $("#size").spinner("value"),
 			operations: {
 				addition: $("#addition").is(":checked"),
 				subtraction: $("#subtraction").is(":checked"),
@@ -33,12 +47,8 @@ $(function () {
 				division: $("#division").is(":checked")
 			},
 			difficulty: $("#difficulty").spinner("value"),
-			maxGroupSize: $("#groupSize").spinner("value")
+			maxGroupSize: $("#groupSize").spinner("value"),
+			torus: $("#torus").is(":checked") ? 0 : 1
 		})
 	})
-	
-	if (location.hash) {
-		var hash = JSON.parse(atob(location.hash.substr(1)))
-		generateKenken(hash[0], hash[1], hash[2])
-	}
 })
