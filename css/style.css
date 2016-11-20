@@ -1,3 +1,11 @@
+@media print
+{    
+    .no-print, .no-print *
+    {
+        display: none !important;
+    }
+}
+
 #kenken {
 	float: right;
 	border-collapse: collapse;
