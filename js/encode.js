@@ -1,4 +1,4 @@
-var optionKeys = ["size", "difficulty", "seed", "maxGroupSize", "torus"], optionOperations = ["addition", "subtraction", "multiplication", "division"]
+var optionKeys = ["size", "difficulty", "seed", "maxGroupSize", "torus"], optionOperations = ["addition", "subtraction", "multiplication", "division", "min", "max", "range", "mod"]
 
 function encodeOptions (options) {
     var data = [], operations = []

@@ -44,11 +44,15 @@ $(function () {
 				addition: $("#addition").is(":checked"),
 				subtraction: $("#subtraction").is(":checked"),
 				multiplication: $("#multiplication").is(":checked"),
-				division: $("#division").is(":checked")
+				division: $("#division").is(":checked"),
+				torus: $("#torus").is(":checked"),
+				min: $("#min").is(":checked"),
+				max: $("#max").is(":checked"),
+				range: $("#range").is(":checked"),
+				mod: $("#mod").is(":checked")
 			},
 			difficulty: $("#difficulty").spinner("value"),
-			maxGroupSize: $("#groupSize").spinner("value"),
-			torus: $("#torus").is(":checked") ? 0 : 1
+			maxGroupSize: $("#groupSize").spinner("value")
 		})
 	})
 })
