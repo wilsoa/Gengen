@@ -1,13 +1,13 @@
 $(function () {
 	var defaultOptions = {
 		size: 5
-	}
+	}, currentKenken
 	
 	if (location.hash) {
 		try{
 			defaultOptions = decodeOptions(location.hash.substr(1))
 			console.log(defaultOptions)
-			generateKenken(defaultOptions)
+			currentKenken = generateKenken(defaultOptions)
 		}catch(e){console.log(e)}
 	}
 	else
@@ -38,21 +38,25 @@ $(function () {
 	$("[type=checkbox]").button()
 	
 	$("#generate").button().on("click", function (){
-		generateKenken({
+		currentKenken = generateKenken({
 			size: $("#size").spinner("value"),
 			operations: {
 				addition: $("#addition").is(":checked"),
 				subtraction: $("#subtraction").is(":checked"),
 				multiplication: $("#multiplication").is(":checked"),
 				division: $("#division").is(":checked"),
-				torus: $("#torus").is(":checked"),
 				min: $("#min").is(":checked"),
 				max: $("#max").is(":checked"),
 				range: $("#range").is(":checked"),
 				mod: $("#mod").is(":checked")
 			},
 			difficulty: $("#difficulty").spinner("value"),
-			maxGroupSize: $("#groupSize").spinner("value")
+			maxGroupSize: $("#groupSize").spinner("value"),
+			torus: $("#torus").is(":checked")
 		})
+	})
+	
+	$("#solve").button().on("click", function () {
+		renderSolution(currentKenken)
 	})
 })
