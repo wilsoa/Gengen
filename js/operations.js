@@ -161,7 +161,7 @@ Maximum.prototype.operation = function(arrayOfNumbers) {
 // The class for range
 function Range() {
 	this.minCells = 2 // Can operate on a minimum of 2 cells
-	this.maxCells = undefined // No max number of cells it can operate on
+	this.maxCells = 4 // Can operate on a maximum of 4 cells
 	this.symbol = 'range'
 }
 
@@ -206,4 +206,80 @@ Mod.prototype.operation = function(arrayOfNumbers) {
 		resultOfOperation = arrayOfNumbers[1] % arrayOfNumbers[0]
 	}
 	return resultOfOperation
+}
+
+// The class for average
+function Average() {
+	this.minCells = 2 // Can operate on a minimum of 2 cells
+	this.maxCells = 4 // Can operate on a maximum of 4 cells
+	this.symbol = 'avg'
+}
+
+// The operation function for average
+Average.prototype.operation = function(arrayOfNumbers) {
+	// Verify that array length is within the size constraints, if not return 0 meaning the operation failed
+	if(arrayOfNumbers.length > this.maxCells || arrayOfNumbers.length < this.minCells) {
+		return false
+	}
+	
+	var sum = 0;
+	//Calculate the average of the values
+	for(var i = 0; i < arrayOfNumbers.length; i++) {
+		sum = sum + arrayOfNumbers[i]
+	}
+	var average = sum / arrayOfNumbers.length
+	if((average % 1)==0) {
+		return average
+	} else {
+		return false
+	}
+}
+
+// The class for parity
+function Parity() {
+	this.minCells = 2 // Can operate on a minimum of 2 cells
+	this.maxCells = 2 // Can operate on a maximum of 2 cells
+	this.symbol = 'par'
+}
+
+// The operation function for parity
+Parity.prototype.operation = function(arrayOfNumbers) {
+	// Verify that array length is within the size constraints, if not return 0 meaning the operation failed
+	if(arrayOfNumbers.length > this.maxCells || arrayOfNumbers.length < this.minCells) {
+		return false
+	}
+	
+	var firstNum = arrayOfNumbers[0]
+	var secondNum = arrayOfNumbers[1]
+	if( (firstNum + secondNum) % 2 == 0) {
+		// They have the same parity, return 1
+		return 1
+	} else {
+		// They have different parity, return 0
+		return 0
+	}
+}
+
+// The class for gcd
+function Gcd() {
+	this.minCells = 2 // Can operate on a minimum of 2 cells
+	this.maxCells = 3 // Can operate on a maximum of 4 cells
+	this.symbol = 'gcd'
+}
+
+// The operation function for gcd
+Gcd.prototype.operation = function(arrayOfNumbers) {
+	// Verify that array length is within the size constraints, if not return 0 meaning the operation failed
+	if(arrayOfNumbers.length > this.maxCells || arrayOfNumbers.length < this.minCells) {
+		return false
+	}
+	
+	// A recursive function for finding the gcd of two numbers
+	function gcd(a,b) { return b ? gcd(b,a%b) : a }
+	
+	var currentGCD = arrayOfNumbers[0]
+	for(var i = 1; i < arrayOfNumbers.length; i++) {
+		currentGCD = gcd(currentGCD,arrayOfNumbers[i])
+	}
+	return currentGCD
 }
