@@ -14,8 +14,7 @@ function Kenken (settings) {
     this.board = []
 	this.minGroupSize = 1
 	this.defaultMaxGroupSize = settings.maxGroupSize
-	this.maxGroupSize = undefined //TO DO: This should be determined from web page, or from the types of operations (if only division of something
-	// with max cellgroup operation size of 2, cannot have groups of more than 2, and so on)
+	this.maxGroupSize = undefined
 	this.cellGroups = []
 	// Determine operation based on checkboxes from webpage
 	this.operations = [new SingleCell()]
@@ -62,11 +61,10 @@ function Kenken (settings) {
 	if(this.maxGroupSize > this.defaultMaxGroupSize) {
 		this.maxGroupSize = this.defaultMaxGroupSize
 	}
-	console.log('maximmum operation size is: '+this.maxGroupSize)
 	
 	this.seed = new MersenneTwister(settings.seed)
 	
-	var builderArray = shuffledArray(size, this.seed)
+	var builderArray = shuffledNumberArray(size, this.seed)
     
     for (var x = 0; x < size; x++) {
         this.board[x] = []
@@ -103,8 +101,12 @@ function Kenken (settings) {
 					}
 				}
 				
-				// Generate random integer in the range [0,this.operations.length-1]
-				var randomOperationStart = Math.floor(this.operations.length*this.seed.random())
+				// Shuffle the operations array to get a good spread of the operations, prevents "overshadowing" where having
+				//  + before x picked + more often due to how the algorithm below selects the oepration
+				shuffleInputArray(this.operations,this.seed)
+				
+				// Start at the beginning of this now random order operations array
+				var randomOperationStart = 0 //Math.floor(this.operations.length*this.seed.random())
 				var randomOperation = randomOperationStart
 				// Runs until valid operation is found, should never infinite loop as there should always be a valid operation
 				var foundOperation = false
@@ -288,27 +290,31 @@ Cell.prototype.getNeighborsOriented = function () {
     return neighbors
 }
 
+// Function to shuffle an array, using to shuffle operations array.
+function shuffleInputArray(array, seed) {
+	// Randomly shuffle the array, doing the algorithm once forward and once
+	// backward, to help create more "randomness"
+	for (var i = 0; i < array.length-1; i++) {
+		// Generate a random integer in the range [i,n-1]
+		// Since seed.random() generates a number in the range [0,1)
+		var randomNum = Math.floor((array.length-i)*seed.random()+i)
+		
+		//swap the array at spots i and randomNum
+		var numToSwap = array[i]
+		array[i] = array[randomNum]
+		array[randomNum] = numToSwap
+    }
+}
+
 // Function to generate an array with the numbers 1 through n in a random order
-function shuffledArray (n, seed) {
+function shuffledNumberArray (n, seed) {
 	var numberArray=[]
 	// Fill the array with numbers 1 through n
 	for(var i = 0; i < n; i++) {
 		numberArray.push(i+1)
 	}
 	
-	// Randomly shuffle the array, doing the algorithm once forward and once
-	// backward, to help create more "randomness" and to attemp to resolve the 
-	// first element problem. (First element would never end up in first spot)
-	for (var i = 0; i < n-1; i++) {
-		// Generate a random integer in the range [i,n-1]
-		// Since seed.random() generates a number in the range [0,1)
-		var randomNum = Math.floor((n-i)*seed.random()+i)
-		
-		//swap the array at spots i and randomNum
-		var numToSwap = numberArray[i]
-		numberArray[i] = numberArray[randomNum]
-		numberArray[randomNum] = numToSwap
-    }
+	shuffleInputArray(numberArray,seed)
 	
 	//return then shuffled array
 	return numberArray
