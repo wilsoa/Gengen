@@ -42,6 +42,15 @@ function Kenken (settings) {
 	if(settings.operations.mod) {
 		this.operations.push(new Mod())
 	}
+	if(settings.operations.avg) {
+		this.operations.push(new Average())
+	}
+	if(settings.operations.par) {
+		this.operations.push(new Parity())
+	}
+	if(settings.operations.gcd) {
+		this.operations.push(new Gcd())
+	}
 	
 	//Determine if the default maxGroupSize needs to be made smaller due to the operations selected
 	for(var i = 0; i < this.operations.length; i++) {

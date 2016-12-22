@@ -48,7 +48,10 @@ $(function () {
 				min: $("#min").is(":checked"),
 				max: $("#max").is(":checked"),
 				range: $("#range").is(":checked"),
-				mod: $("#mod").is(":checked")
+				mod: $("#mod").is(":checked"),
+				avg: $("#avg").is(":checked"),
+				par: $("#par").is(":checked"),
+				gcd: $("#gcd").is(":checked")
 			},
 			difficulty: $("#difficulty").spinner("value"),
 			maxGroupSize: $("#groupSize").spinner("value"),

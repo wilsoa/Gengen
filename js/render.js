@@ -15,7 +15,7 @@ function renderCell (cell, dimension, solve) {
 	var td = $("<td align='center' />").width(dimension).height(dimension)
 	
 	var neighbors = cell.getNeighborsOriented(), groupID = cell.cellGroup.groupID
-	console.log(cell.x, cell.y, neighbors)
+	
 	td.css('border-top', (neighbors.up && (neighbors.up.cellGroup.groupID == groupID)) ? "1px dotted black" : "3px solid black")
 	td.css('border-bottom', (neighbors.down && (neighbors.down.cellGroup.groupID == groupID)) ? "1px dotted black" : "3px solid black")
 	td.css('border-left', (neighbors.left && (neighbors.left.cellGroup.groupID == groupID)) ? "1px dotted black" : "3px solid black")
